@@ -60,4 +60,18 @@ router.post("/activate", authMiddleware, async (req, res) => {
   }
 });
 
+// Deactivate repository
+router.post("/deactivate", authMiddleware, async (req, res) => {
+  try {
+    const { repoId } = req.body;
+
+    await Repo.updateOne({ repoId, userId: req.user.id }, { active: false });
+
+    res.json({ message: "Repository deactivated" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Deactivation failed" });
+  }
+});
+
 module.exports = router;
